@@ -1,0 +1,10 @@
+Package: libcanopenurl
+Name: libCanOpenURL
+Depends: mobilesubstrate (>= 0.9.6000), firmware (>= 9.0), com.rpetrich.rocketbootstrap
+Version: 1.0
+Architecture: iphoneos-arm
+Description: Stay away iOS 9 canOpenURL: restriction.
+Maintainer: r_plus
+Author: r_plus
+Section: Development
+Tag: role::developer
