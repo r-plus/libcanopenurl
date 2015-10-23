@@ -18,8 +18,8 @@ internal-all::
 	$(ECHO_NOTHING)cp -a obj/libcanopenurl.dylib $(THEOS)/lib/$(ECHO_END)
 
 stage::
-		mkdir -p $(THEOS_STAGING_DIR)/usr/include
-		$(ECHO_NOTHING)cp -a LCCanOpenURL.h $(THEOS_STAGING_DIR)/usr/include $(ECHO_END)
+	mkdir -p $(THEOS_STAGING_DIR)/usr/include
+	$(ECHO_NOTHING)cp -a LCCanOpenURL.h $(THEOS_STAGING_DIR)/usr/include $(ECHO_END)
 
 after-install::
 	install.exec "killall -9 SpringBoard backboardd"
