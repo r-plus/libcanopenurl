@@ -1,4 +1,4 @@
-Package: libcanopenurl
+Package: jp.r-plus.libcanopenurl
 Name: libCanOpenURL
 Depends: mobilesubstrate (>= 0.9.6000), firmware (>= 9.0), com.rpetrich.rocketbootstrap
 Version: 1.0
