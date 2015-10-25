@@ -2,6 +2,8 @@ ARCHS = armv7 arm64
 TARGET = iphone:clang::9.0
 include $(THEOS)/makefiles/common.mk
 
+# ADDITIONAL_CFLAGS = -DDEBUG
+
 LIBRARY_NAME = libcanopenurl
 libcanopenurl_FILES = LCCanOpenURL.x
 libcanopenurl_FRAMEWORKS = UIKit
