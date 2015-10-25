@@ -81,10 +81,12 @@ static LCCanOpenURL *sharedInstance;
 
 static BOOL CanOpenURL(id URL)
 {
-    if (kCFCoreFoundationVersionNumber < 1200)
-        return NO;
+    CMLog(@"URL = %@", URL);
     if ([URL isKindOfClass:[NSURL class]]) {
         URL = ((NSURL *)URL).absoluteString;
+    }
+    if (kCFCoreFoundationVersionNumber < 1200 || %c(SBIconModel)) {
+        return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:URL]];
     }
     LMResponseBuffer buffer;
     if (LMConnectionSendTwoWayPropertyList(&connection, LCCanOpenURLMessage, URL, &buffer)) {
