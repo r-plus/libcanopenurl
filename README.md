@@ -1,5 +1,10 @@
 # libCanOpenURL
 
+This is deprecated library to get handleable url scheme.    
+More easist and no self IPC way is `-[LSApplicationWorkspace applicationsAvailableForHandlingURLScheme:]` method. (Detail #3)
+
+This is sample project to use [LightMessaging](https://github.com/rpetrich/LightMessaging).
+
 After iOS 9, `canOpenURL:` method always returns `NO` if not declared on application Info.plist.
 libCanOpenURL calls `canOpenURL:` via SpringBoard process to bypass this restriction.
 
