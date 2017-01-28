@@ -1,7 +1,7 @@
 # libCanOpenURL
 
 This is deprecated library to get handleable url scheme.    
-More easist and no self IPC way is `-[LSApplicationWorkspace applicationsAvailableForHandlingURLScheme:]` method. (Detail #3)
+More easist and no self IPC way is `-[LSApplicationWorkspace applicationsAvailableForHandlingURLScheme:]` method. (Detail [#3](https://github.com/r-plus/libcanopenurl/issues/3))
 
 This is sample project to use [LightMessaging](https://github.com/rpetrich/LightMessaging).
 
