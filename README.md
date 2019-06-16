@@ -1,7 +1,14 @@
 # libCanOpenURL
 
+## iOS 11+
+
+`applicationsAvailableForHandlingURLScheme` api is restricted. I don't know how to bypass this restriction, libCanOpenURL come back as robust way for it.
+
+## iOS 9-10
 This is deprecated library to get handleable url scheme.    
 More easist and no self IPC way is `-[LSApplicationWorkspace applicationsAvailableForHandlingURLScheme:]` method. (Detail [#3](https://github.com/r-plus/libcanopenurl/issues/3))
+
+## detail
 
 This is sample project to use [LightMessaging](https://github.com/rpetrich/LightMessaging).
 
