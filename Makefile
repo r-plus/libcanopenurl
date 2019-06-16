@@ -17,7 +17,7 @@ before-all::
 
 internal-all::
 	$(ECHO_NOTHING)echo " coping library to theos lib directory..."$(ECHO_END)
-	$(ECHO_NOTHING)cp -a .theos/obj/debug/libcanopenurl.dylib $(THEOS)/lib/$(ECHO_END)
+	$(ECHO_NOTHING)cp -a .theos/obj/libcanopenurl.dylib $(THEOS)/lib/ 2>/dev/null || cp -a .theos/obj/debug/libcanopenurl.dylib $(THEOS)/lib/$(ECHO_END)
 
 stage::
 	mkdir -p $(THEOS_STAGING_DIR)/usr/include
