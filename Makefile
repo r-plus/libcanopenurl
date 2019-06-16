@@ -1,4 +1,4 @@
-ARCHS = armv7 arm64
+ARCHS = armv7 arm64 arm64e
 TARGET = iphone:clang::9.0
 include $(THEOS)/makefiles/common.mk
 
@@ -17,7 +17,7 @@ before-all::
 
 internal-all::
 	$(ECHO_NOTHING)echo " coping library to theos lib directory..."$(ECHO_END)
-	$(ECHO_NOTHING)cp -a obj/libcanopenurl.dylib $(THEOS)/lib/$(ECHO_END)
+	$(ECHO_NOTHING)cp -a .theos/obj/debug/libcanopenurl.dylib $(THEOS)/lib/$(ECHO_END)
 
 stage::
 	mkdir -p $(THEOS_STAGING_DIR)/usr/include

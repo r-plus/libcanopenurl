@@ -1,5 +1,5 @@
 #import <UIKit/UIKit.h>
-#import <ColorLog.h>
+#import <HBLog.h>
 #import "LCCanOpenURL.h"
 #define ROCKETBOOTSTRAP_LOAD_DYNAMIC
 #import "../LightMessaging/LightMessaging.h"
@@ -10,7 +10,8 @@ static LMConnection connection = {
     "libcanopenurl.datasource"
 };
 enum {
-    LCCanOpenURLMessage
+    LCCanOpenURLMessage,
+    LCBatchCanOpenURLMessage
 };
 // }}}
 // LightMessaging functions. {{{
@@ -18,7 +19,7 @@ static void processMessage(SInt32 messageId, mach_port_t replyPort, CFDataRef da
 {
     switch (messageId) {
         case LCCanOpenURLMessage: {
-            CMLog(@"LCcanOpenURL, App -> SpringBoard return NSNumber.");
+            HBLogDebug(@"LCcanOpenURL, App -> SpringBoard return NSNumber.");
             if (!data)
                 break;
             NSString *URLString = [NSPropertyListSerialization propertyListWithData:(NSData * _Nonnull)data options:0 format:NULL error:NULL];
@@ -27,6 +28,24 @@ static void processMessage(SInt32 messageId, mach_port_t replyPort, CFDataRef da
             NSURL *URL = [NSURL URLWithString:URLString];
             BOOL result = [[UIApplication sharedApplication] canOpenURL:URL];
             LMSendPropertyListReply(replyPort, result ? @YES : @NO);
+            return;
+        }
+        case LCBatchCanOpenURLMessage: {
+            HBLogDebug(@"LCBatchCanOpenURLMessage, App -> SpringBoard return [NSNumber].");
+            if (!data)
+                break;
+            NSArray<NSString *> *URLStrings = [NSPropertyListSerialization propertyListWithData:(NSData * _Nonnull)data options:0 format:NULL error:NULL];
+            if (![URLStrings isKindOfClass:[NSArray class]])
+                break;
+            NSMutableArray *results = [[@[] mutableCopy] autorelease];
+            for (NSString *url in URLStrings) {
+                if (![url isKindOfClass:[NSString class]])
+                    break;
+                NSURL *URL = [NSURL URLWithString:url];
+                BOOL result = [[UIApplication sharedApplication] canOpenURL:URL];
+                [results addObject:[NSNumber numberWithBool:result]];
+            }
+            LMSendPropertyListReply(replyPort, results);
             return;
         }
     }
@@ -81,7 +100,7 @@ static LCCanOpenURL *sharedInstance;
 
 static BOOL CanOpenURL(id URL)
 {
-    CMLog(@"URL = %@", URL);
+    HBLogDebug(@"URL = %@", URL);
     if ([URL isKindOfClass:[NSURL class]]) {
         URL = ((NSURL *)URL).absoluteString;
     }
@@ -95,6 +114,27 @@ static BOOL CanOpenURL(id URL)
     id result = LMResponseConsumePropertyList(&buffer);
     return [result isKindOfClass:[NSNumber class]] ? [result boolValue] : NO;
 }
+static NSArray<NSNumber *> * _Nonnull BatchCanOpenURL(NSArray *URLs)
+{
+    if (![URLs isKindOfClass:[NSArray class]]) {
+        return @[];
+    }
+    if (kCFCoreFoundationVersionNumber < 1200 || %c(SBIconModel)) {
+        NSMutableArray *results = [[@[] mutableCopy] autorelease];
+        for (NSString *url in URLs) {
+            NSURL *URL = [NSURL URLWithString:url];
+            BOOL result = [[UIApplication sharedApplication] canOpenURL:URL];
+            [results addObject:[NSNumber numberWithBool:result]];
+        }
+        return results;
+    }
+    LMResponseBuffer buffer;
+    if (LMConnectionSendTwoWayPropertyList(&connection, LCBatchCanOpenURLMessage, URLs, &buffer)) {
+        return @[];
+    }
+    id result = LMResponseConsumePropertyList(&buffer);
+    return result;
+}
 
 - (BOOL)canOpenURL:(NSURL * _Nonnull)URL
 {
@@ -104,6 +144,10 @@ static BOOL CanOpenURL(id URL)
 - (BOOL)canOpenURLString:(NSString * _Nonnull)URLString
 {
     return CanOpenURL(URLString);
+}
+- (NSArray<NSNumber *> * _Nonnull)batchCanOpenURL:(NSArray<NSString *>*  _Nonnull)URLs
+{
+    return BatchCanOpenURL(URLs);
 }
 @end  // }}}
 @interface LCCanOpenURLImpl : LCCanOpenURL  // {{{
