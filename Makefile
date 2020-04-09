@@ -7,6 +7,7 @@ include $(THEOS)/makefiles/common.mk
 LIBRARY_NAME = libcanopenurl
 libcanopenurl_FILES = LCCanOpenURL.x
 libcanopenurl_FRAMEWORKS = UIKit
+libcanopenurl_LIBRARIES = rocketbootstrap
 libcanopenurl_LDFLAGS = -Wl,-segalign,4000
 
 include $(THEOS_MAKE_PATH)/library.mk
